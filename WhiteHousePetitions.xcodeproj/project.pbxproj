@@ -66,7 +66,6 @@
 				D4540F1D266EFD19007094AA /* SceneDelegate.swift */,
 				D4540F31266EFD59007094AA /* View */,
 				D4540F24266EFD1A007094AA /* Assets.xcassets */,
-				D4540F26266EFD1A007094AA /* LaunchScreen.storyboard */,
 				D4540F29266EFD1A007094AA /* Info.plist */,
 			);
 			path = WhiteHousePetitions;
@@ -93,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				D4540F21266EFD19007094AA /* Main.storyboard */,
+				D4540F26266EFD1A007094AA /* LaunchScreen.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";

@@ -17,7 +17,22 @@ class ViewController: UITableViewController {
         let urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
         
         if let url = URL(string: urlString) {
-            if let data = try? Data(contentsOf: url)
+            if let data = try? Data(contentsOf: url) {
+                parseData(json: data)
+            }
+        }
+    }
+    
+    func parseData(json: Data) {
+        let decoder = JSONDecoder()
+        
+        // The method decoder.decode is a throwing method so use try? to check if it worked
+        // The decode method is deserializing the JSON
+        // There is an alternate class named JSONEncoder we can use the serialize (encode) our JSON if sending it back to an API
+        // Use Petitions.self here as referring directly to the Petitions struct, not an instance of the struct
+        if let jsonPetitions = try? decoder.decode(Petitions.self, from: json) {
+            petitions = jsonPetitions.results
+            tableView.reloadData()
         }
     }
     
@@ -27,8 +42,9 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = "Title goes here"
-        cell.detailTextLabel?.text = "Subtitle goes here"
+        let petition = petitions[indexPath.row]
+        cell.textLabel?.text = petition.title
+        cell.detailTextLabel?.text = petition.body
         return cell
     }
 }
