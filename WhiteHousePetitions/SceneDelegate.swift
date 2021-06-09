@@ -5,18 +5,27 @@
 //  Created by Robert Ranf on 6/7/21.
 //
 
+// Note that in the HWS iOS book, the code in func scene is in the AppDelegate. As of iOS 13, the scene delegate takes over some of the roles of the app delegate
+// including the scene(willConnectTo:options) function, which is used for dynamically injecting a scene into the app (like we're doing here)
+// versus recreating the scene in a new vc just to use a different filtered version of the returned api data
+
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        if let tabBarController = window?.rootViewController as? UITabBarController {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "NavController")
+            vc.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 1)
+            tabBarController.viewControllers?.append(vc)
         guard let _ = (scene as? UIWindowScene) else { return }
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

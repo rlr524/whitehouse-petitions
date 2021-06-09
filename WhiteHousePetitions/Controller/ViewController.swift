@@ -63,7 +63,7 @@ class ViewController: UITableViewController {
     
     func showError() {
         let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed. Please check your connection and try again.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(ac, animated: true, completion: nil)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 }
