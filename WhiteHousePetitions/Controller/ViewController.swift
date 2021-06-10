@@ -14,6 +14,8 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(showCredits))
+        
         let urlString: String
         
         if navigationController?.tabBarItem.tag == 0 {
@@ -63,6 +65,16 @@ class ViewController: UITableViewController {
     
     func showError() {
         let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed. Please check your connection and try again.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
+    
+    @objc func showCredits() {
+        let text = """
+Data from the White House "We the People" API
+"""
+        let ac = UIAlertController(title: "Credits", message: text, preferredStyle: .alert)
+        ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
     }
