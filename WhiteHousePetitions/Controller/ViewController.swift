@@ -10,11 +10,13 @@ import UIKit
 class ViewController: UITableViewController {
     
     var petitions = [Petition]()
+    var petitionsFiltered = [Petition]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(showCredits))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(filterResults))
         
         let urlString: String
         
@@ -26,6 +28,7 @@ class ViewController: UITableViewController {
         if let url = URL(string: urlString) {
             if let data = try? Data(contentsOf: url) {
                 parseData(json: data)
+                petitionsFiltered = petitions
                 return
             }
         }
@@ -46,12 +49,12 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return petitions.count
+        return petitionsFiltered.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let petition = petitions[indexPath.row]
+        let petition = petitionsFiltered[indexPath.row]
         cell.textLabel?.text = petition.title
         cell.detailTextLabel?.text = petition.body
         return cell
@@ -77,5 +80,28 @@ Data from the White House "We the People" API
         ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
+    }
+    
+    // FIXME: This is filtering on the search however the DetatilViewController is showing detail from the first item regarless of search results
+    // FIXME: There is no means to clear the search results
+    
+    @objc func filterResults() {
+        let ac = UIAlertController(title: "Search", message: "Enter a search term", preferredStyle: .alert)
+        ac.addTextField()
+        let submitSearch = UIAlertAction(title: "Search", style: .default) { [weak self, weak ac] action in
+        guard let answer = ac?.textFields?[0].text else { return }
+            self?.submit(answer)
+        }
+        ac.addAction(submitSearch)
+        present(ac, animated: true)
+    }
+    func submit(_ answer: String) {
+        petitionsFiltered.removeAll(keepingCapacity: true)
+        for x in petitions {
+            if x.title.contains(answer) {
+                petitionsFiltered.append(x)
+                tableView.reloadData()
+            }
+        }
     }
 }
